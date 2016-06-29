@@ -23,11 +23,12 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
 2. Install the Triton python module locally
 3. Copy the "triton" script to your PATH (usually ~/.local/bin)
 4. Install Nosy Newt:
-    
-      $ git clone https://github.com/CIFASIS/nosy-newt
 
-      $ cd nosy-newt
-      $ python setup.py install --local
+```bash
+    $ git clone https://github.com/CIFASIS/nosy-newt
+    $ cd nosy-newt
+    $ python setup.py install --local
+```
 
 ## Example
 
@@ -63,11 +64,10 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
 
 - Better exploration system (now just random)
 - Shared library support
-
-### Emulated syscalls (for detecting I/O)
-
-- [x] open
-- [x] read
-- [ ] close
-- [ ] seek
-- ...
+- Emulated syscalls (for detecting I/O)
+  - [x] open
+  - [x] read
+  - [ ] close
+  - [ ] seek
+- Website + Documentation
+- Logo
