@@ -20,16 +20,14 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
 ## Installation
 
 1. [Install Triton with PIN support](http://triton.quarkslab.com/documentation/doxygen/index.html#install_sec)
-2. Install the Triton python module locally:
-    $ cd Triton
-    $ python setup.py install --local
+2. Install the Triton python module locally
+3. Copy the "triton" script to your PATH (usually ~/.local/bin)
+4. Install Nosy Newt:
+    
+      $ git clone https://github.com/CIFASIS/nosy-newt
 
-2. Copy the "triton" script to your PATH (usually ~/.local/bin)
-3. Install Nosy Newt:
-
-    $ git clone https://github.com/CIFASIS/nosy-newt
-    $ cd nosy-newt
-    $ python setup.py install --local
+      $ cd nosy-newt
+      $ python setup.py install --local
 
 ## Example
 
