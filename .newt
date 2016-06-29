@@ -1,0 +1,3 @@
+[input]
+file = test.dat
+outdir = inputs

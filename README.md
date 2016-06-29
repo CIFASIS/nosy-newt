@@ -13,7 +13,7 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
 
 ## Requirements
 
-* [triton](https://github.com/JonathanSalwan/Triton)
+* [Triton](https://github.com/JonathanSalwan/Triton)
 * Some dedicated RAM memory (at least 4 GB).
 * Time.
 
@@ -21,15 +21,20 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
 
 1. [Install Triton with PIN support](http://triton.quarkslab.com/documentation/doxygen/index.html#install_sec)
 2. Install the Triton python module locally:
+    $ cd Triton
     $ python setup.py install --local
+
 2. Copy the "triton" script to your PATH (usually ~/.local/bin)
 3. Install Nosy Newt:
+
+    $ git clone https://github.com/CIFASIS/nosy-newt
+    $ cd nosy-newt
     $ python setup.py install --local
 
 ## Example
 
     $ mkdir inputs
-    $ python -c "print 'a'*32" > inputs/input.dat 
+    $ python -c "print 'a'*24" > inputs/input.dat 
     $ ./newt.py -n 3 -i inputs "unzip -l @@"
     Using ['unzip', '-l', 'test.dat'] as arguments
     Exploring inputs/input.dat executing unzip
@@ -55,7 +60,13 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
     Exploring inputs/-8008955989580669208.dat executing unzip
     ...
 
-## Emulated syscalls (for detecting I/O)
+
+## TODO:
+
+- Better exploration system (now just random)
+- Shared library support
+
+### Emulated syscalls (for detecting I/O)
 
 - [x] open
 - [x] read
