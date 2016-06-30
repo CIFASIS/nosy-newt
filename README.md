@@ -67,6 +67,7 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
 - Emulated syscalls (for detecting I/O)
   - [x] open
   - [x] read
+  - [x] mmap (basic)
   - [ ] close
   - [ ] seek
 - Website + Documentation

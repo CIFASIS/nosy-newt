@@ -16,6 +16,8 @@ def entry_callbacks(threadId, std):
     #print "entry",std, getSyscallNumber(std)
     if getSyscallNumber(std) == SYSCALL.OPEN:
         handle_entry_open(std)
+    elif getSyscallNumber(std) == SYSCALL.MMAP:
+        handle_entry_mmap(std)
     elif getSyscallNumber(std) == SYSCALL.READ:
         handle_entry_read(std)
 
@@ -26,6 +28,8 @@ def exit_callbacks(threadId, std):
 
     if syscall == SYSCALL.OPEN:
         handle_exit_open(args)
+    elif syscall == SYSCALL.MMAP:
+        handle_exit_mmap(args)
     elif syscall == SYSCALL.READ:
         handle_exit_read(args)
 
@@ -40,6 +44,7 @@ def fini_callbacks():
     outdir = newt.gstate.outdir
 
     pcs = getPathConstraints()
+    print pcs
     previousConstraints = equal(bvtrue(), bvtrue())
     taken = []
     #pcs = getPathConstraintsAst()
