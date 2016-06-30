@@ -1,4 +1,4 @@
-# Nosy Newt
+# Nosy Newt <img src="https://raw.githubusercontent.com/CIFASIS/nosy-newt/master/logo.png" width="40">
 
 Nosy Newt is a simple concolic execution tool for exploring the input space of a binary executable programs. I created this POC because i could not find any better tool for this. It is extensively using [Triton](http://triton.quarkslab.com/) for almost everything (hooking, solving constrains, etc).
 
@@ -71,4 +71,3 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
   - [ ] close
   - [ ] seek
 - Website + Documentation
-- Logo
