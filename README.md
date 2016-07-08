@@ -62,6 +62,7 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
 
 ## TODO:
 
+- Add explicit support for x86
 - Better exploration system (now just random)
 - Shared library support
 - Emulated syscalls (for detecting I/O)

@@ -25,10 +25,6 @@ if __name__ == '__main__':
     addCallback(exit_callbacks, CALLBACK.SYSCALL_EXIT)
     addCallback(fini_callbacks, CALLBACK.FINI)
 
-    #global current_filenames 
-    #current_filenames = sys.argv
-    #addCallback(mycb, iCALLBACK.BEFORE)
-
     # Run Program
     runProgram()
 

@@ -49,26 +49,34 @@ def fini_callbacks():
     taken = []
     #pcs = getPathConstraintsAst()
     for pc in pcs:
-      taken.append(pc.getTakenAddress())
       if pc.isMultipleBranches():
 
         # Get all branches
         branches = pc.getBranchConstraints()        
-        print "Solving path conditions.."
+        print "Solving path conditions..",
+        #print branches
 
         for branch in branches:
           if branch['taken'] == False:
+            #taken.append(branch['target'])
+            #print hex(branch['target'])
+            #print branch['constraint']
+            #print previousConstraints
+            pid = taken+[branch['target']]
             f = assert_(land(previousConstraints, branch['constraint']))
             models = getModel(f)
             new_input = copy(current_input)
+            #print models
             for k, v in models.items():
               #print k,type(k)
               new_input[k] = chr(v.getValue())
             if new_input <> current_input:
-              #print new_input
+              print ""
               dump_input(outdir,str(f),"",new_input)
             else:              
               print ".",
-        previousConstraints = land(previousConstraints, pc.getTakenPathConstraintAst())
+
+      previousConstraints = land(previousConstraints, pc.getTakenPathConstraintAst())
+      taken.append(pc.getTakenAddress())
 
     clearPathConstraints()
