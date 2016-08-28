@@ -21,9 +21,9 @@ if __name__ == '__main__':
     enableSymbolicOptimization(OPTIMIZATION.ONLY_ON_TAINTED, True)
 
     # Add callback
-    addCallback(entry_callbacks, CALLBACK.SYSCALL_ENTRY)
-    addCallback(exit_callbacks, CALLBACK.SYSCALL_EXIT)
-    addCallback(fini_callbacks, CALLBACK.FINI)
+    insertCall(entry_callbacks, INSERT_POINT.SYSCALL_ENTRY)
+    insertCall(exit_callbacks, INSERT_POINT.SYSCALL_EXIT)
+    insertCall(fini_callbacks, INSERT_POINT.FINI)
 
     # Run Program
     runProgram()

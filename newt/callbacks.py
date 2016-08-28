@@ -57,12 +57,12 @@ def fini_callbacks():
         #print branches
 
         for branch in branches:
-          if branch['taken'] == False:
+          if branch['isTaken'] == False:
             #taken.append(branch['target'])
             #print hex(branch['target'])
             #print branch['constraint']
             #print previousConstraints
-            pid = taken+[branch['target']]
+            pid = taken+[branch['dstAddr']]
             f = assert_(land(previousConstraints, branch['constraint']))
             models = getModel(f)
             new_input = copy(current_input)
