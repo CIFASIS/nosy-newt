@@ -1,10 +1,7 @@
 #!/usr/bin/python2
 
-#import ast
-
 from pintool import *
 from triton  import *
-from ast import *
 from copy import copy
 
 from newt.handlers import *
@@ -45,7 +42,7 @@ def fini_callbacks():
 
     pcs = getPathConstraints()
     print pcs
-    previousConstraints = equal(bvtrue(), bvtrue())
+    previousConstraints = ast.equal(ast.bvtrue(),ast.bvtrue())
     taken = []
     #pcs = getPathConstraintsAst()
     for pc in pcs:
@@ -63,7 +60,7 @@ def fini_callbacks():
             #print branch['constraint']
             #print previousConstraints
             pid = taken+[branch['dstAddr']]
-            f = assert_(land(previousConstraints, branch['constraint']))
+            f = ast.assert_(ast.land(previousConstraints, branch['constraint']))
             models = getModel(f)
             new_input = copy(current_input)
             #print models
@@ -76,7 +73,7 @@ def fini_callbacks():
             else:              
               print ".",
 
-      previousConstraints = land(previousConstraints, pc.getTakenPathConstraintAst())
+      previousConstraints = ast.land(previousConstraints, pc.getTakenPathConstraintAst())
       taken.append(pc.getTakenAddress())
 
     clearPathConstraints()

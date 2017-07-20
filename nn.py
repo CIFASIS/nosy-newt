@@ -17,8 +17,7 @@ if __name__ == '__main__':
 
     # Start JIT at the entry point
     startAnalysisFromEntry()
-  
-    enableSymbolicOptimization(OPTIMIZATION.ONLY_ON_TAINTED, True)
+    enableMode(MODE.ONLY_ON_TAINTED, True)
 
     # Add callback
     insertCall(entry_callbacks, INSERT_POINT.SYSCALL_ENTRY)
