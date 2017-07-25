@@ -27,7 +27,7 @@ Nosy Newt is designed to discover new inputs to trigger different paths in your 
 ```bash
     $ git clone https://github.com/CIFASIS/nosy-newt
     $ cd nosy-newt
-    $ python setup.py install --local
+    $ python setup.py install --user
 ```
 
 ## Example

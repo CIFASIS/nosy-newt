@@ -27,7 +27,7 @@ if __name__ == "__main__":
     #parser.add_argument("-m", help="", type=str, nargs='+', dest="mods")
     parser.add_argument("cmd", help="", type=str, default=None)
     options = parser.parse_args()
-    input_filename = "test.tar"
+    input_filename = "test.dat"
    
     cmd = options.cmd
     input_dir = options.input_dir

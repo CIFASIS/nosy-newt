@@ -36,7 +36,6 @@ def fini_callbacks():
     #global fds
     #print newt.gstate.fds
     #global current_input  
-
     current_input = newt.gstate.input_data
     outdir = newt.gstate.outdir
     ctx = newt.gstate.ctx
@@ -46,22 +45,21 @@ def fini_callbacks():
     print pcs
     previousConstraints = astctx.equal(astctx.bvtrue(),astctx.bvtrue())
     taken = []
-    #pcs = getPathConstraintsAst()
     for pc in pcs:
       if pc.isMultipleBranches():
 
         # Get all branches
-        branches = pc.getBranchConstraints()        
+        branches = pc.getBranchConstraints()
         print "Solving path conditions..",
-        #print branches
 
         for branch in branches:
           if branch['isTaken'] == False:
-            #taken.append(branch['target'])
-            #print hex(branch['target'])
-            #print branch['constraint']
-            #print previousConstraints
-            pid = taken+[branch['dstAddr']]
+
+            pid = tuple(taken + [str(branch['constraint'])])
+            print "pid:",hash(pid)
+            if exists_input(outdir, pid):
+                continue
+
             f = astctx.land([previousConstraints, branch['constraint']])
             models = ctx.getModel(f)
             new_input = copy(current_input)
@@ -70,12 +68,13 @@ def fini_callbacks():
               #print k,type(k)
               new_input[k] = chr(v.getValue())
             if new_input <> current_input:
-              print ""
-              dump_input(outdir,str(f),"",new_input)
+              print "SAT!"
+              dump_input(outdir,pid,"",new_input)
             else:              
               print ".",
 
       previousConstraints = astctx.land([previousConstraints, pc.getTakenPathConstraintAst()])
       taken.append(pc.getTakenAddress())
+      #previousConstraints = ast.land(previousConstraints, pc.getTakenPathConstraintAst())
 
     ctx.clearPathConstraints()
