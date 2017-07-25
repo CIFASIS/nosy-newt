@@ -4,7 +4,7 @@ from pintool import *
 from triton  import *
 
 def dump_input(outdir,ident, label, xs):
-  filename = outdir+"/"+str(hash(ident))+label+".dat"
+  filename = outdir+"/i"+str(hash(ident))
 
   if os.path.isfile(filename):
     return
@@ -13,6 +13,11 @@ def dump_input(outdir,ident, label, xs):
   print "Dumping",filename,"with",repr("".join(xs))
   for x in xs:
      f.write(x)
+
+def exists_input(outdir,ident):
+  filename = outdir+"/i"+str(hash(ident))
+  return os.path.isfile(filename)
+
 
 #def check_input(ident, label, xs):
 #  filename = str(hash(ident))+label+".dat"

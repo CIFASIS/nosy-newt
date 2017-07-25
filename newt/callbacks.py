@@ -36,44 +36,41 @@ def fini_callbacks():
     #global fds
     #print newt.gstate.fds
     #global current_input  
-
     current_input = newt.gstate.input_data
     outdir = newt.gstate.outdir
 
     pcs = getPathConstraints()
-    print pcs
     previousConstraints = ast.equal(ast.bvtrue(),ast.bvtrue())
     taken = []
-    #pcs = getPathConstraintsAst()
     for pc in pcs:
       if pc.isMultipleBranches():
 
         # Get all branches
-        branches = pc.getBranchConstraints()        
+        branches = pc.getBranchConstraints()
         print "Solving path conditions..",
-        #print branches
 
         for branch in branches:
-          if branch['isTaken'] == False:
-            #taken.append(branch['target'])
-            #print hex(branch['target'])
-            #print branch['constraint']
-            #print previousConstraints
-            pid = taken+[branch['dstAddr']]
-            f = ast.assert_(ast.land(previousConstraints, branch['constraint']))
-            models = getModel(f)
-            new_input = copy(current_input)
-            #print models
-            for k, v in models.items():
-              #print k,type(k)
-              new_input[k] = chr(v.getValue())
-            if new_input <> current_input:
-              print ""
-              dump_input(outdir,str(f),"",new_input)
-            else:              
-              print ".",
+            if branch['isTaken'] == False:
+                pid = tuple(taken + [str(branch['constraint'])])
+                print "pid:",hash(pid)
+                if exists_input(outdir, pid):
+                    continue
 
-      previousConstraints = ast.land(previousConstraints, pc.getTakenPathConstraintAst())
+                f = ast.assert_(ast.land(previousConstraints, branch['constraint']))
+                models = getModel(f)
+                new_input = copy(current_input)
+                #print models
+                for k, v in models.items():
+                    #print k,type(k)
+                    new_input[k] = chr(v.getValue())
+                if new_input <> current_input:
+                    print ""
+                    dump_input(outdir,pid,"",new_input)
+                else:
+                    print ".",
+
+
       taken.append(pc.getTakenAddress())
+      previousConstraints = ast.land(previousConstraints, pc.getTakenPathConstraintAst())
 
     clearPathConstraints()

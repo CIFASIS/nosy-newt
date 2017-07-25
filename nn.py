@@ -13,11 +13,10 @@ if __name__ == '__main__':
     # Set arch
     setArchitecture(ARCH.X86_64)
     #enableSymbolicEmulation(False)
-    #assert(isSymbolicEmulationEnabled())
 
     # Start JIT at the entry point
     startAnalysisFromEntry()
-    enableMode(MODE.ONLY_ON_TAINTED, True)
+    enableMode(MODE.ONLY_ON_SYMBOLIZED, True)
 
     # Add callback
     insertCall(entry_callbacks, INSERT_POINT.SYSCALL_ENTRY)
