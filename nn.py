@@ -9,15 +9,19 @@ from triton  import *
 from newt.config import *
 from newt.callbacks import *
 
+import newt.gstate
+
+
 if __name__ == '__main__':
+    newt.gstate.ctx = getTritonContext()
     # Set arch
-    setArchitecture(ARCH.X86_64)
+    newt.gstate.ctx.setArchitecture(ARCH.X86_64)
     #enableSymbolicEmulation(False)
     #assert(isSymbolicEmulationEnabled())
 
     # Start JIT at the entry point
     startAnalysisFromEntry()
-    enableMode(MODE.ONLY_ON_TAINTED, True)
+    newt.gstate.ctx.enableMode(MODE.ONLY_ON_TAINTED, True)
 
     # Add callback
     insertCall(entry_callbacks, INSERT_POINT.SYSCALL_ENTRY)

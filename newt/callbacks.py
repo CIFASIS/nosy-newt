@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 from pintool import *
-from triton  import *
+from triton  import SYSCALL64 as SYSCALL
 from copy import copy
 
 from newt.handlers import *
@@ -39,10 +39,12 @@ def fini_callbacks():
 
     current_input = newt.gstate.input_data
     outdir = newt.gstate.outdir
+    ctx = newt.gstate.ctx
+    astctx = newt.gstate.ctx.getAstContext()
 
-    pcs = getPathConstraints()
+    pcs = ctx.getPathConstraints()
     print pcs
-    previousConstraints = ast.equal(ast.bvtrue(),ast.bvtrue())
+    previousConstraints = astctx.equal(astctx.bvtrue(),astctx.bvtrue())
     taken = []
     #pcs = getPathConstraintsAst()
     for pc in pcs:
@@ -60,8 +62,8 @@ def fini_callbacks():
             #print branch['constraint']
             #print previousConstraints
             pid = taken+[branch['dstAddr']]
-            f = ast.assert_(ast.land(previousConstraints, branch['constraint']))
-            models = getModel(f)
+            f = astctx.land([previousConstraints, branch['constraint']])
+            models = ctx.getModel(f)
             new_input = copy(current_input)
             #print models
             for k, v in models.items():
@@ -73,7 +75,7 @@ def fini_callbacks():
             else:              
               print ".",
 
-      previousConstraints = ast.land(previousConstraints, pc.getTakenPathConstraintAst())
+      previousConstraints = astctx.land([previousConstraints, pc.getTakenPathConstraintAst()])
       taken.append(pc.getTakenAddress())
 
-    clearPathConstraints()
+    ctx.clearPathConstraints()
