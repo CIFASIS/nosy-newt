@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 from pintool import *
-from triton  import *
+from triton  import SYSCALL64 as SYSCALL
 from copy import copy
 
 from newt.handlers import *
@@ -38,9 +38,12 @@ def fini_callbacks():
     #global current_input  
     current_input = newt.gstate.input_data
     outdir = newt.gstate.outdir
+    ctx = newt.gstate.ctx
+    astctx = newt.gstate.ctx.getAstContext()
 
-    pcs = getPathConstraints()
-    previousConstraints = ast.equal(ast.bvtrue(),ast.bvtrue())
+    pcs = ctx.getPathConstraints()
+    print pcs
+    previousConstraints = astctx.equal(astctx.bvtrue(),astctx.bvtrue())
     taken = []
     for pc in pcs:
       if pc.isMultipleBranches():
@@ -50,27 +53,28 @@ def fini_callbacks():
         print "Solving path conditions..",
 
         for branch in branches:
-            if branch['isTaken'] == False:
-                pid = tuple(taken + [str(branch['constraint'])])
-                print "pid:",hash(pid)
-                if exists_input(outdir, pid):
-                    continue
+          if branch['isTaken'] == False:
 
-                f = ast.assert_(ast.land(previousConstraints, branch['constraint']))
-                models = getModel(f)
-                new_input = copy(current_input)
-                #print models
-                for k, v in models.items():
-                    #print k,type(k)
-                    new_input[k] = chr(v.getValue())
-                if new_input <> current_input:
-                    print ""
-                    dump_input(outdir,pid,"",new_input)
-                else:
-                    print ".",
+            pid = tuple(taken + [str(branch['constraint'])])
+            print "pid:",hash(pid)
+            if exists_input(outdir, pid):
+                continue
 
+            f = astctx.land([previousConstraints, branch['constraint']])
+            models = ctx.getModel(f)
+            new_input = copy(current_input)
+            #print models
+            for k, v in models.items():
+              #print k,type(k)
+              new_input[k] = chr(v.getValue())
+            if new_input <> current_input:
+              print "SAT!"
+              dump_input(outdir,pid,"",new_input)
+            else:              
+              print ".",
 
+      previousConstraints = astctx.land([previousConstraints, pc.getTakenPathConstraintAst()])
       taken.append(pc.getTakenAddress())
-      previousConstraints = ast.land(previousConstraints, pc.getTakenPathConstraintAst())
+      #previousConstraints = ast.land(previousConstraints, pc.getTakenPathConstraintAst())
 
-    clearPathConstraints()
+    ctx.clearPathConstraints()

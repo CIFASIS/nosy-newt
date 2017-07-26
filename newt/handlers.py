@@ -1,10 +1,9 @@
 from pintool import *
-from triton  import *
-
+from triton  import SYSCALL64 as SYSCALL
+from triton  import REG
 from newt.utils import *
 
 import newt.gstate
-
 
 def handle_entry_mmap(std):
     #global current_syscall
@@ -20,16 +19,14 @@ def handle_exit_mmap(args):
 
     fd,size = args
     #print newt.gstate.fds
+    ctx = newt.gstate.ctx
     
     if fd in newt.gstate.fds and newt.gstate.fds[fd] in newt.gstate.filename:
         print "Hooking read of",newt.gstate.fds[fd]
-        ptr = getCurrentRegisterValue(REG.RAX)
+        ptr = getCurrentRegisterValue(ctx.registers.rax)
         symbolize(ptr, size)
         newt.gstate.input_data = newt.gstate.input_data + (list(read_buffer(ptr,size)))
     #print "read", buf
-
-
-
 
 
 def handle_entry_read(std):
@@ -45,11 +42,11 @@ def handle_entry_read(std):
 def handle_exit_read(args):
 
     fd,ptr = args
-    #print newt.gstate.fds
+    ctx = newt.gstate.ctx
 
     if newt.gstate.fds[fd] in newt.gstate.filename:
         print "Hooking read of",newt.gstate.fds[fd]
-        n = getCurrentRegisterValue(REG.RAX)
+        n = getCurrentRegisterValue(ctx.registers.rax)
         symbolize(ptr, n)
         newt.gstate.input_data = newt.gstate.input_data + (list(read_buffer(ptr,n)))
     #print "read", buf
@@ -67,9 +64,11 @@ def handle_exit_open(args):
 
     #global fds
     #global current_syscall
+    ctx = newt.gstate.ctx
+    assert(ctx is not None)
 
     filename = args[0]
-    ret = getCurrentRegisterValue(REG.RAX)
+    ret = getCurrentRegisterValue(ctx.registers.rax)
     newt.gstate.fds[ret] = filename
     print "opening", filename, "with fd", ret
 

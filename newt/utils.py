@@ -3,6 +3,8 @@ import os.path
 from pintool import *
 from triton  import *
 
+import newt.gstate
+
 def dump_input(outdir,ident, label, xs):
   filename = outdir+"/i"+str(hash(ident))
 
@@ -55,10 +57,11 @@ def read_buffer(ptr, max_size):
 def symbolize(ptr, n):
    
     while (n > 0):
-         taintMemory(MemoryAccess(ptr, CPUSIZE.BYTE))
-         concreteValue = getCurrentMemoryValue(MemoryAccess(ptr, CPUSIZE.BYTE))
+         newt.gstate.ctx.taintMemory(MemoryAccess(ptr, CPUSIZE.BYTE))
+         concreteValue = getCurrentMemoryValue(ptr)
          #print hex(concreteValue)
-         convertMemoryToSymbolicVariable(MemoryAccess(ptr, CPUSIZE.BYTE, concreteValue))
+         newt.gstate.ctx.setConcreteMemoryValue(ptr, getCurrentMemoryValue(ptr))
+         newt.gstate.ctx.convertMemoryToSymbolicVariable(MemoryAccess(ptr, CPUSIZE.BYTE))
          print "symbolized",hex(ptr),"with",hex(concreteValue)
          ptr = ptr + 1
          n = n - 1
